@@ -513,7 +513,7 @@ class TestSetPredictiveValue:
                 "202301",
                 1,
                 "202302",
-                100.0,
+                (100.0, "P"),
                 "Test 1: Predictive Only",
                 # Test for when a predictive value is provided,
                 # we would not expect the check_auxiliary_value() function
@@ -527,7 +527,7 @@ class TestSetPredictiveValue:
                 "202205",
                 2,
                 "202207",
-                (50.0),
+                (50.0, "P"),
                 "Test 2: Auxiliary Only"
                 # Test for when a predictive value is not provided,
                 # we would expect the check_auxiliary_value() function
@@ -541,7 +541,7 @@ class TestSetPredictiveValue:
                 "202101",
                 12,
                 "202201",
-                10,
+                (10, "P"),
                 "Test 3: Predictive and auxiliary are None",
                 # Test for when a predictive and auxiliary value is not provided,
                 # we would expect the check_auxiliary_value() function
@@ -555,7 +555,7 @@ class TestSetPredictiveValue:
                 "201907",
                 12,
                 "202106",
-                90,
+                (90, "P"),
                 "Test 4: Predictive and auxiliary exists but predictive period does not match prior period",
                 # Test for when a predictive value is provided,
                 # we would expect the check_auxiliary_value() function
@@ -569,7 +569,7 @@ class TestSetPredictiveValue:
                 "202107",
                 2,
                 "202207",
-                10,
+                (10, "P"),
                 "Test 5: Predictive exists but period does not match prior period",
                 # Test for when a predictive value is provided,
                 # we would expect the check_auxiliary_value() function
@@ -583,7 +583,7 @@ class TestSetPredictiveValue:
                 "202202",
                 1,
                 "202203",
-                (150.0),
+                (150.0, "P"),
                 "Test 6: All Inputs"
                 # Test for when a all values is are provided,
                 # we would not expect the check_auxiliary_value() function
@@ -596,12 +596,35 @@ class TestSetPredictiveValue:
                 "202201",
                 24,
                 "202305",
-                10.0,
+                (10.0, "P"),
                 "Test 7: Predictive and prior periods do not match and auxiliary is None so total is returned as predictive",
                 # Test for when a predictive value is provided,
                 # we would expect the check_auxiliary_value() function
                 # to be triggered and the total value to be used in
                 # place of the predictive value as predictive period != prior period
+            ),
+            (
+                100.0,
+                None,
+                10,
+                None,
+                24,
+                "202305",
+                (100.0, "S"),
+                "Test 8: Test that if predictive period is none we get a S tccmarker returned",
+                # If the predictive period is none we want to stop the method
+            ),
+            (
+                100.0,
+                60,
+                10,
+                "202201",
+                0,
+                "202201",
+                (10, "P"),
+                "Test 9: If periodicity is 0 and predictive period = prior period we set predictive = total",
+                # If periodicity is 0 we do not wish to stop the process
+                # instead we simply set the predictive as the total
             ),
         ],
     )
@@ -1581,7 +1604,7 @@ class TestTotalsAndComponents:
                 10817,
                 28,
                 "201907",
-                0,
+                1,
                 None,
                 11,
                 None,
@@ -3221,7 +3244,7 @@ class TestTotalsAndComponents:
                     (6),
                 ],
                 False,
-                None,
+                80,
                 28,
                 None,
                 60,
@@ -3231,15 +3254,15 @@ class TestTotalsAndComponents:
                 (
                     "BQ",
                     "201607",
-                    10,
-                    90,
-                    110,
+                    None,
+                    None,
+                    None,
                     28,
                     90,
-                    [81, 0, 3.6, 5.4],
-                    "C",
+                    [90, 0, 4, 6],
+                    "S",
                 ),
-                "Test 68 - Predictive period is None so auxiliary value is used.",
+                "Test 68 - Predictive period is None so method stops.",
                 # This test is to check the set_predictive_value() function
                 # The periodicity is 60
                 # The prior period would be calculated out to 60 months before the period
@@ -3247,6 +3270,206 @@ class TestTotalsAndComponents:
                 # which does match the predictive calculate_prior_period
                 # Hence the check_auxiliary_value function is called and the predictive value
                 # is replaced by the auxiliary value
+            ),
+            (
+                "BR",
+                "201304",
+                90,
+                [
+                    (90),
+                    (0),
+                    (4),
+                    (6),
+                ],
+                False,
+                95,
+                28,
+                "200804",
+                0,
+                None,
+                None,
+                0.1, 
+                (
+                    "BR",
+                    "201304",
+                    10,
+                    90,
+                    110,
+                    28,
+                    90,
+                    [81, 0.0, 3.6, 5.4],
+                    "C",
+                ),
+                 "Test 69 - Periodicity = 0 but predictive period is entered incorrectly",
+                # This test checks that when a user enters periodicity as zero
+                # we in fact have the predictive period entered as the current period
+                # otherwise, it will throw an error.
+            ),
+            (
+                "BS",
+                "201304",
+                90,
+                [
+                    (90),
+                    (0),
+                    (4),
+                    (6),
+                ],
+                False,
+                95,
+                28,
+                "201304",
+                0,
+                11,
+                None,
+                0.1,
+                (
+                    "BS",
+                    "201304",
+                    10,
+                    90,
+                    110,
+                    28,
+                    90,
+                    [81, 0.0, 3.6, 5.4],
+                    "S",
+                ),
+                "Test 70 - Periodicity = 0 but predictive period is entered incorrectly",
+                # This test checks that when a user enters periodicity as zero
+                # and we have the predictive period entered as the current period
+                # the predictive is set as the total.
+            ),
+            (
+                "BT",
+                "202301",
+                90,
+                [
+                    (90),
+                    (0),
+                    (4),
+                    (6),
+                ],
+                False,
+                95,
+                28,
+                "202212",
+                1,
+                None,
+                None,
+                0.1,
+                (
+                    "BT",
+                    "202301",
+                    5,
+                    90,
+                    110,
+                    28,
+                    90,
+                    [81, 0, 3.6, 5.4],
+                    "C",
+                ),
+                "Test 71 - Predictive exists and periodicity = 1, crosses year boundary",
+                # This test is to check when a periodicity takes us to the previous year
+                # from a january value, we get the correct december prior period result
+            ),
+            (
+                "BU",
+                "202303",
+                90,
+                [
+                    (90),
+                    (0),
+                    (4),
+                    (6),
+                ],
+                False,
+                95,
+                28,
+                "202212",
+                3,
+                None,
+                None,
+                0.1,
+                (
+                    "BU",
+                    "202303",
+                    5,
+                    90,
+                    110,
+                    28,
+                    90,
+                    [81, 0, 3.6, 5.4],
+                    "C",
+                ),
+                "Test 72 - Predictive exists and periodicity = 3, crosses year boundary",
+                # This test is to check when a periodicity takes us to the previous year
+                # from a january value, we get the correct december prior period result
+            ),
+            (
+                "BV",
+                "202306",
+                90,
+                [
+                    (90),
+                    (0),
+                    (4),
+                    (6),
+                ],
+                False,
+                95,
+                28,
+                "202212",
+                6,
+                None,
+                None,
+                0.1,
+                (
+                    "BV",
+                    "202306",
+                    5,
+                    90,
+                    110,
+                    28,
+                    90,
+                    [81, 0, 3.6, 5.4],
+                    "C",
+                ),
+                "Test 72 - Predictive exists and periodicity = 6, crosses year boundary",
+                # This test is to check when a periodicity takes us to the previous year
+                # from a january value, we get the correct december prior period result
+            ),
+            (
+                "BW",
+                "202312",
+                90,
+                [
+                    (90),
+                    (0),
+                    (4),
+                    (6),
+                ],
+                False,
+                95,
+                28,
+                "202212",
+                12,
+                None,
+                None,
+                0.1,
+                (
+                    "BW",
+                    "202312",
+                    5,
+                    90,
+                    110,
+                    28,
+                    90,
+                    [81, 0, 3.6, 5.4],
+                    "C",
+                ),
+                "Test 74 - Predictive exists and periodicity = 12, crosses year boundary",
+                # This test is to check when a periodicity takes us to the previous year
+                # from a january value, we get the correct december prior period result
             ),
         ],
     )

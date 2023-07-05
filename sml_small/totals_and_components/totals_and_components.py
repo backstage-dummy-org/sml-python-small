@@ -384,7 +384,7 @@ def set_predictive_value(
     predictive_period: str,
     periodicity: int,
     period: str,
-) -> float | None:
+) -> tuple[TccMarker, float | None]:
     """
     Checks if predictive and auxiliary values are input, when predictive is None and auxiliary
     is input set predictive to auxiliary, when both are None we use the total.
@@ -408,15 +408,21 @@ def set_predictive_value(
     :return: returns the prior period in the same format as the current
     :rtype: str
     """
-    prior_period = calculate_prior_period(period, periodicity)
+    if predictive_period is None:
+        tccMarker = TccMarker.STOP
+    else:
+        prior_period = calculate_prior_period(period, periodicity)
 
-    if (predictive is None) or (predictive and predictive_period != prior_period):
-        predictive = check_auxiliary_value(
-            auxiliary,
-            total,
-        )
+        if periodicity == 0 and (predictive_period == prior_period):
+            predictive = total
+        elif (predictive is None) or (predictive and predictive_period != prior_period):
+            predictive = check_auxiliary_value(
+                auxiliary,
+                total,
+            )   
+        tccMarker = TccMarker.METHOD_PROCEED
 
-    return predictive
+    return predictive, tccMarker
 
 
 def calculate_prior_period(period, periodicity) -> str:
@@ -948,7 +954,7 @@ def totals_and_components(
             percentage_difference_threshold,
         )
         #  Ensure either the predictive or auxiliary parameter specified
-        predictive = set_predictive_value(
+        (predictive, output_list["tcc_marker"]) = set_predictive_value(
             input_parameters[InputParameters.PREDICTIVE.value],
             input_parameters[InputParameters.AUXILIARY.value],
             input_parameters[InputParameters.TOTAL.value],
@@ -957,69 +963,72 @@ def totals_and_components(
             period,
         )
 
-        component_total = sum_components(
-            input_parameters[InputParameters.COMPONENTS.value],
-            input_parameters[InputParameters.PRECISION.value],
-        )
-        #  Check for error scenarios where the sum of the components is zero and
-        #  a positive predictive value has been received
-        output_list["tcc_marker"] = check_zero_errors(predictive, component_total)
-        absolute_difference = check_sum_components_predictive(
-            predictive,
-            component_total,
-            input_parameters[InputParameters.PRECISION.value],
-        )
-
         #  Determine if a correction is required
         if output_list["tcc_marker"] == TccMarker.METHOD_PROCEED:
-            (
-                low_threshold,
-                high_threshold,
-                output_list,
-            ) = calculate_percent_thresholds(
+
+            component_total = sum_components(
+                input_parameters[InputParameters.COMPONENTS.value],
+                input_parameters[InputParameters.PRECISION.value],
+            )
+            #  Check for error scenarios where the sum of the components is zero and
+            #  a positive predictive value has been received
+            output_list["tcc_marker"] = check_zero_errors(predictive, component_total)
+            absolute_difference = check_sum_components_predictive(
+                predictive,
                 component_total,
-                input_parameters[InputParameters.PERCENTAGE_DIFFERENCE_THRESHOLD.value],
-                output_list,
                 input_parameters[InputParameters.PRECISION.value],
             )
 
-            # Absolute difference is output here as it would not change from this point
-            # it is not outputted sooner as a S marker could be returned
-            # before this point and that would have no absolute difference value.
-            output_list["absolute_difference"] = absolute_difference
-
-            # If the predictive value is not equal to the sum of components we
-            # return a no correction marker
-            if input_parameters[InputParameters.PREDICTIVE.value] == component_total:
-                output_list["tcc_marker"] = TccMarker.NO_CORRECTION
-            else:
-                #  Determine if the difference error can be automatically corrected
-                output_list["tcc_marker"] = determine_error_detection(
-                    input_parameters[
-                        InputParameters.ABSOLUTE_DIFFERENCE_THRESHOLD.value
-                    ],
-                    input_parameters[
-                        InputParameters.PERCENTAGE_DIFFERENCE_THRESHOLD.value
-                    ],
-                    absolute_difference,
-                    predictive,
+            #  Determine if a correction is required
+            if output_list["tcc_marker"] == TccMarker.METHOD_PROCEED:
+                (
                     low_threshold,
                     high_threshold,
+                    output_list,
+                ) = calculate_percent_thresholds(
+                    component_total,
+                    input_parameters[InputParameters.PERCENTAGE_DIFFERENCE_THRESHOLD.value],
+                    output_list,
+                    input_parameters[InputParameters.PRECISION.value],
                 )
-                if output_list["tcc_marker"] == TccMarker.METHOD_PROCEED:
-                    (
-                        output_list["final_total"],
-                        output_list["final_components"],
-                        output_list["tcc_marker"],
-                    ) = error_correction(
-                        amend_total=amend_total,
-                        components_sum=component_total,
-                        original_components=input_parameters[
-                            InputParameters.COMPONENTS.value
+
+                # Absolute difference is output here as it would not change from this point
+                # it is not outputted sooner as a S marker could be returned
+                # before this point and that would have no absolute difference value.
+                output_list["absolute_difference"] = absolute_difference
+
+                # If the predictive value is not equal to the sum of components we
+                # return a no correction marker
+                if input_parameters[InputParameters.PREDICTIVE.value] == component_total:
+                    output_list["tcc_marker"] = TccMarker.NO_CORRECTION
+                else:
+                    #  Determine if the difference error can be automatically corrected
+                    output_list["tcc_marker"] = determine_error_detection(
+                        input_parameters[
+                            InputParameters.ABSOLUTE_DIFFERENCE_THRESHOLD.value
                         ],
-                        total=input_parameters[InputParameters.TOTAL.value],
-                        precision=input_parameters[InputParameters.PRECISION.value],
+                        input_parameters[
+                            InputParameters.PERCENTAGE_DIFFERENCE_THRESHOLD.value
+                        ],
+                        absolute_difference,
+                        predictive,
+                        low_threshold,
+                        high_threshold,
                     )
+                    if output_list["tcc_marker"] == TccMarker.METHOD_PROCEED:
+                        (
+                            output_list["final_total"],
+                            output_list["final_components"],
+                            output_list["tcc_marker"],
+                        ) = error_correction(
+                            amend_total=amend_total,
+                            components_sum=component_total,
+                            original_components=input_parameters[
+                                InputParameters.COMPONENTS.value
+                            ],
+                            total=input_parameters[InputParameters.TOTAL.value],
+                            precision=input_parameters[InputParameters.PRECISION.value],
+                        )
 
         # We return the raw string instead of the enum value
         output_list["tcc_marker"] = output_list["tcc_marker"].value
