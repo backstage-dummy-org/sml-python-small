@@ -31,8 +31,12 @@ class InputParameters(Enum):
     ABSOLUTE_DIFFERENCE_THRESHOLD = 4
     PERCENTAGE_DIFFERENCE_THRESHOLD = 5
     PRECISION = 6
+<<<<<<< HEAD
     PERIOD_ONSET = 7
 
+=======
+    PERIOD_OFFSET = 7
+>>>>>>> 60c23978c29088cf4d521e7d95d722dddf906d26
 
 class TccMarker(Enum):
     """
@@ -107,7 +111,10 @@ class TotalsAndComponentsOutput:
     ] = ""  # unique identifier, e.g Business Reporting Unit SG-should this be optional?
     period: [str] = ""  # not used in initial PoC always assume current period
     predictive_period: [str] = ""  # used for determining calculation values
+<<<<<<< HEAD
     period_offset: Optional[int]
+=======
+>>>>>>> 60c23978c29088cf4d521e7d95d722dddf906d26
     absolute_difference: Optional[float]  # this is the absolute value showing the
     # difference between the components input and the predictive total
     low_percent_threshold: Optional[
@@ -202,7 +209,7 @@ def validate_input(
     amend_total: bool,
     period: Optional[str],
     predictive_period: Optional[str],
-    period_offset: Optional[int],
+    period_offset: Optional[int | None],
     predictive: Optional[float],
     precision: Optional[int],
     auxiliary: Optional[float],
@@ -216,8 +223,7 @@ def validate_input(
     float | None,
     float | None,
     int | None,
-    int | None,
-    float | None,
+    int,
 ]:
     """
     validate_input is to ensure that the dataset input record has all the values
@@ -229,7 +235,11 @@ def validate_input(
     :param period: Not used in initial Proof of Concept (PoC). Assumes current period.
     :type period Optional(str)
     :param period_offset: Value used to calculate the prior period
+<<<<<<< HEAD
     :type period_offset Optional(int)
+=======
+    :type period_offset Optional[int]
+>>>>>>> 60c23978c29088cf4d521e7d95d722dddf906d26
     :param predictive_period: The predictive period is the period cycle.
     :type predictive_period Optional(str)
     :param total: Target period total, numeric – nulls allowed
@@ -324,8 +334,11 @@ def validate_input(
                 "Precision range must be more than 0 and less than or equal to 28"
             )
         validate_number("Precision", precision)
+    if period_offset is None:
+       period_offset = 0
     if period_offset:
         validate_number("period_offset", period_offset)
+        period_offset = int(period_offset)
 
     return (
         total,
@@ -408,6 +421,7 @@ def set_predictive_value(
     :return: returns the prior period in the same format as the current
     :rtype: str
     """
+
     if predictive_period is None:
         tccMarker = TccMarker.STOP
     else:
@@ -832,7 +846,7 @@ def totals_and_components(
     predictive: Optional[float],
     precision: Optional[int],
     predictive_period: Optional[str],
-    period_offset: Optional[int],
+    period_offset: Optional[int | None],
     auxiliary: Optional[float],
     absolute_difference_threshold: Optional[float],
     percentage_difference_threshold: Optional[float],
@@ -863,7 +877,11 @@ def totals_and_components(
     :param predictive_period: The predictive period is the period cycle.
     :type predictive_period: float
     :param period_offset: Value used to calculate the prior period
+<<<<<<< HEAD
     :type period_offset Optional(int)
+=======
+    :type period_offset Optional[int |None]
+>>>>>>> 60c23978c29088cf4d521e7d95d722dddf906d26
     :param total: Original value returned for the total.
     :type total: float
     :param components: List of components that should equal the total or predictive value.
@@ -931,7 +949,7 @@ def totals_and_components(
         output_list = {
             "identifier": identifier,
             "period": period,
-            "predictive_period": predictive_period,
+            "predictive_period": None,
             "period_offset": period_offset,
             "final_total": total,
             "final_components": components,
@@ -959,7 +977,7 @@ def totals_and_components(
             input_parameters[InputParameters.AUXILIARY.value],
             input_parameters[InputParameters.TOTAL.value],
             predictive_period,
-            period_offset,
+            input_parameters[InputParameters.PERIOD_OFFSET.value],
             period,
         )
 
