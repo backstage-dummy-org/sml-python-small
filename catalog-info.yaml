@@ -5,7 +5,7 @@ metadata:
   description: Approved statistical methods for use in small datasets.
   annotations:
     jira/project-key: SPP
-    github.com/project-slug: ONSDigital/sml-python-small
+    github.com/project-slug: ONSdigital/sml-python-small
     backstage.io/linguist: https://github.com/backstage-dummy-org/sml-python-small/
   tags:
     - python
