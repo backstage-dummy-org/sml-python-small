@@ -7,7 +7,7 @@ metadata:
     jira/project-key: SPP
     github.com/project-slug: ONSdigital/sml-python-small
     backstage.io/linguist: https://github.com/backstage-dummy-org/sml-python-small/
-    backstage.io/kubernetes-id: garbagetime
+    backstage.io/kubernetes-id: knote
   tags:
     - python
     - sml
