@@ -7,7 +7,7 @@ metadata:
     jira/project-key: SPP
     github.com/project-slug: ONSdigital/sml-python-small
     backstage.io/linguist: https://github.com/backstage-dummy-org/sml-python-small/
-    'backstage.io/kubernetes-label-selector': 'app=knote' # 'app=kubernetes-bootcamp'
+    'backstage.io/kubernetes-label-selector': 'app=kubernetes-bootcamp' # 'app=knote'
     # backstage.io/kubernetes-id: knote
   tags:
     - python
