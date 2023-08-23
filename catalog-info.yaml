@@ -19,4 +19,5 @@ metadata:
 spec:
   type: service
   lifecycle: production
+  system: sml
   owner: group:spp-sml
