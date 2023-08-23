@@ -1,6 +1,7 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
+  title: SML Python Small
   name: sml-python-small
   description: Approved statistical methods for use in small datasets.
   annotations:
