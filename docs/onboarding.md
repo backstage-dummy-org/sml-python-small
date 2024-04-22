@@ -26,16 +26,18 @@ As the SPP Library is a Python library, there is no specific architecture diagra
 
 To get started smoothly, please complete the following tasks:
 
-1. **Set up Development Environment:** Follow the instructions provided in the [Development Setup Guide](https://example.com/development_setup_guide) to set up your development environment for working with Python and Pandas.
+1. **Set up Development Environment:** Follow the instructions provided in the [Development Setup Guide](https://confluence.ons.gov.uk/display/SML/Setting+up+SML+to+run+locally) to set up your development environment for working with Python and Pandas.
 
-2. **Review Project Plan:** Familiarize yourself with the project roadmap and key milestones outlined in the [Project Plan](https://example.com/project_plan).
+2. **Review Project Plan:** Familiarize yourself with the project roadmap and key milestones outlined in the [Project Plan](https://confluence.ons.gov.uk/display/SML/Statistical+Infrastructure+and+Design+Hub+Roadmap).
 
 3. **Explore Documentation:** Visit the documentation directory in the project repository to understand the usage and implementation details of each statistical method.
 
 ## Resources
 
-- [Development Setup Guide](https://example.com/development_setup_guide)
-- [Project Plan](https://example.com/project_plan)
+- [SML Overview page]([https://example.com/development_setup_guide](https://confluence.ons.gov.uk/pages/viewpage.action?pageId=14902311))
+- [Project Plan](https://confluence.ons.gov.uk/display/SML/Statistical+Infrastructure+and+Design+Hub+Roadmap)
+- [Development Setup Guide](https://confluence.ons.gov.uk/display/SML/Setting+up+SML+to+run+locally)
+- [Glossary](https://confluence.ons.gov.uk/display/SML/Glossary)
 
 ## Need Help?
 
