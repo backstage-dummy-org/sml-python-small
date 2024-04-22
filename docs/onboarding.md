@@ -18,6 +18,8 @@ Welcome to our team! We're thrilled to have you join us as we work on our latest
 ## Project Architecture
 
 As the SPP Library is a Python library, there is no specific architecture diagram. However, it's designed to seamlessly integrate with the existing infrastructure of the Statistical Production Platform.
+
+#### SPP - High Level Diagram
 ![SPP- High Level Diagram](https://confluence.ons.gov.uk/rest/gliffy/1.0/embeddedDiagrams/ea1872a2-dfb2-4ae5-8213-909ec7107888.png)
 
 ## Onboarding Tasks
