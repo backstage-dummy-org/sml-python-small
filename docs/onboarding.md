@@ -37,6 +37,7 @@ To get started smoothly, please complete the following tasks:
 - [SML Overview page](https://confluence.ons.gov.uk/pages/viewpage.action?pageId=14902311)
 - [Project Plan](https://confluence.ons.gov.uk/display/SML/Statistical+Infrastructure+and+Design+Hub+Roadmap)
 - [Development Setup Guide](https://confluence.ons.gov.uk/display/SML/Setting+up+SML+to+run+locally)
+- [SML Method Development Workflow](https://confluence.ons.gov.uk/display/SML/Method+Development+Process+Overview)
 - [Glossary](https://confluence.ons.gov.uk/display/SML/Glossary)
 
 ## Need Help?
