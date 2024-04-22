@@ -5,20 +5,35 @@ metadata:
   name: sml-python-small
   description: Approved statistical methods for use in small datasets.
   annotations:
-    jira/project-key: SPP
-    github.com/project-slug: backstage-dummy-org/sml-python-small
-    backstage.io/linguist: https://github.com/backstage-dummy-org/sml-python-small/
-    'backstage.io/kubernetes-label-selector': 'app=kubernetes-bootcamp' # 'app=knote'
-    # backstage.io/kubernetes-id: knote
+    github.com/project-slug: github.com?owner=backstage-dummy-org&repo=test-permission2
+    backstage.io/techdocs-ref: dir:.
+    onboarding-docs: https://raw.githubusercontent.com/backstage-dummy-org/test-permission2/master/docs/onboarding.md
   tags:
     - python
+    - java
+    - typescript
+    - javascript
+    - aws
+    - spp-sml
     - sml
+    - ons
   links:
-    - url: https://statisticalmethodslibrary.ons.gov.uk
-      title: SML Website
-      icon: search
+    - url: https://confluence.ons.gov.uk/display/SEC/SDP+Homepage
+      title: Supporting Documentation
+      icon: docs
+    - url: https://confluence.ons.gov.uk/display/SEC/SDP%3A+Core+features
+      title: Build Documentation
+      icon: docs
+    - url: https://officenationalstatistics.sharepoint.com/sites/ONS_DDaT_Communities/_layouts/15/embed.aspx?UniqueId=0f12cbfc-a3fc-45b3-952d-d871918874db&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create
+      title: Deployment Documentation
+      icon: docs
+    - url: https://confluence.ons.gov.uk/display/SEC/Initial+Research
+      title: Release
+      icon: docs
+  cloud:
+    provider: "AWS"
+    buckets: demowebsite7861, cf-templates-p13wahha5ywe-eu-west-2, dstdemowebsite129922
 spec:
   type: service
   lifecycle: production
-  system: sml
-  owner: group:spp-sml
+  owner: group:default/spp-sml
