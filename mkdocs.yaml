@@ -1,0 +1,10 @@
+site_name: SML Python Small
+site_description: SML Python Small
+docs_dir: docs
+nav:
+  - Overview: index.md
+  - Onboarding: onboarding.md
+  - Release Notes: ./release-notes/1.0.0.md
+
+plugins:
+  - techdocs-core
