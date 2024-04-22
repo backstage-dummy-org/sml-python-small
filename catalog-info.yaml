@@ -5,7 +5,7 @@ metadata:
   name: sml-python-small
   description: Approved statistical methods for use in small datasets.
   annotations:
-    github.com/project-slug: github.com?owner=backstage-dummy-org&repo=test-permission2
+    github.com/project-slug: github.com?owner=backstage-dummy-org&repo=sml-python-small
     backstage.io/techdocs-ref: dir:.
     onboarding-docs: https://raw.githubusercontent.com/backstage-dummy-org/sml-python-small/main/docs/onboarding.md
   tags:
