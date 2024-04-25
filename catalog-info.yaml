@@ -6,7 +6,7 @@ metadata:
   description: Approved statistical methods for use in small datasets.
   annotations:
     github.com/project-slug: backstage-dummy-org/sml-python-small
-    backstage.io/techdocs-ref: dir:.
+    backstage.io/techdocs-ref: dir:. /onboarding
   tags:
     - python
     - java
