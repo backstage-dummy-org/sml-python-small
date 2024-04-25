@@ -1,0 +1,8 @@
+site_name: SML Python Small
+site_description: SML Python Small
+docs_dir: ./
+nav:
+  - Overview: index.md
+
+plugins:
+  - techdocs-core
